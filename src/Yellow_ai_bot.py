@@ -1,0 +1,18 @@
+from config import model, YELLOW_SYSTEM_PROMPT
+
+
+def yellow(user_input):
+
+    try:
+        response = model.invoke([
+            {"role": "system", "content": YELLOW_SYSTEM_PROMPT},
+            {"role": "user", "content": user_input}
+        ])
+
+
+        print(response.content)
+        return response
+    except Exception as e:
+        print(f"Error: {e}")
+        return "Sorry, something went wrong."
+

@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  joe-stumble-app:
+    build: .
+    ports:
+      - "8010:8010"  # Map container port 8010 to host port 8010
+
+    env_file:
+      - .env  # Load from .env file
+    volumes:
+      - .:/app  # For development with hot reload
