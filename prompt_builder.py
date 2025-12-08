@@ -1,65 +1,41 @@
+from persona_config import EVENT_GUIDELINES 
 
 
 
-def build_prompt(bot_persona: str, event_type: str, event_data: dict, context: dict):
+def build_prompt(bot_persona, event_type, event_data, context):
     username = event_data.get("username", "@User")
+    event_rule = EVENT_GUIDELINES.get(event_type, "Respond appropriately to the event.")
 
-    # EVENT-SPECIFIC INSTRUCTIONS
-    EVENT_GUIDELINES = {
-        "NEW_USER_JOINED": "Welcome them warmly and make them feel safe.",
-        "SAD_POST_DETECTED": "Be gentle, validating, and emotionally supportive.",
-        "USER_RELAPSE_MENTIONED": "Acknowledge the setback without shame. Keep it supportive.",
-        "USER_TAGGED_BOT": "Answer their question or acknowledge the tag.",
-        "CHAT_SILENT": "Restart the conversation gently.",
-        "DAILY_CHECK_IN": "Give a warm, short check-in message.",
-        "TRIBE_MOOD_LOW": "Support the whole group with empathy.",
-        "BADGE_UNLOCKED": "Celebrate the achievement clearly and warmly.",
-        "MOOD_CHECKIN_COMPLETED": "Acknowledge their emotional honesty.",
-        "STREAK_MILESTONE": "Celebrate their consistency.",
-        "POINTS_MILESTONE": "Recognize their progress enthusiastically.",
-        "PROGRESS_MILESTONE_COMPLETED": "Celebrate growth without exaggeration."
-    }
-
-    EVENT_RULE = EVENT_GUIDELINES.get(event_type, "Respond appropriately to the event.")
-
-    # GLOBAL STRICT RULES (Fixes all the issues)
     STRICT_RULES = f"""
 STRICT NON-NEGOTIABLE RULES:
-- Response MUST be 1–2 sentences only. Never more.
+- Response MUST be 1–2 sentences only.
 - MUST be under 280 characters.
 - MUST mention {username}.
-- Use max 1 emoji.
-- NO lists, no bullets, no long explanations.
-- Do NOT give instructions or steps unless you are Joe AND the event is streak/progress related.
-- Sara and Blue NEVER give steps, advice, or actions.
-- Yellow NEVER gives steps.
-- Responses must match the bot’s personality AND the event type tone.
-- If event is emotional (SAD_POST_DETECTED, TRIBE_MOOD_LOW, RELAPSE), soften tone even for Joe/Yellow.
+- DO NOT start the response with the username (e.g., do not begin with "{username}," or "@{username}").
+- Begin with a normal sentence, then mention {username} later in the sentence.
+- Bad example (do NOT do): "{username}, great job today!"
+- Good example: "Great job today—proud of you, {username}."
+- Use a maximum of 1 emoji.
+- No lists, no formatting, no bullets.
+- Sara/Blue/Yellow/White MUST NOT give advice or steps.
+- Joe may give short steps ONLY for streak/progress/check-in events.
+- Red must be direct but never cruel.
+- Emotional events override personality (be softer).
 """
 
-    # FINAL PROMPT SENT TO THE LLM
-    prompt = f"""
-You are {bot_persona}.
+    return f"""
+{bot_persona}
 
 EVENT TYPE: {event_type}
-EVENT GOAL: {EVENT_RULE}
-
+EVENT GOAL: {event_rule}
 USERNAME: {username}
 
 CONTEXT:
 Recent Messages: {context.get("recent_messages", [])}
-Current User Info: {context.get("current_user", {})}
+Current User: {context.get("current_user", {})}
 Tribe Mood: {context.get("tribe_mood", {})}
 
 {STRICT_RULES}
 
-Now write a response that:
-- Fits the personality
-- Matches the event type
-- Is short, warm, and human
-- Follows ALL rules above
-
-Final Output:
+Write a single short response that follows ALL rules.
 """
-
-    return prompt
