@@ -1,32 +1,3 @@
-
-
-
-
-
-
-# ---------------------------------------
-# 2. EVENT GUIDELINES
-# ---------------------------------------
-
-EVENT_GUIDELINES = {
-    "NEW_USER_JOINED": "Welcome them warmly and make them feel safe.",
-    "SAD_POST_DETECTED": "Respond with gentle emotional support.",
-    "USER_RELAPSE_MENTIONED": "Normalize the setback without shame.",
-    "USER_TAGGED_BOT": "Acknowledge or answer their direct tag.",
-    "CHAT_SILENT": "Gently restart the conversation.",
-    "DAILY_CHECK_IN": "Give a warm morning check-in.",
-    "TRIBE_MOOD_LOW": "Support the entire group.",
-    "BADGE_UNLOCKED": "Celebrate their badge achievement.",
-    "MOOD_CHECKIN_COMPLETED": "Acknowledge emotional honesty.",
-    "STREAK_MILESTONE": "Celebrate consistent progress.",
-    "POINTS_MILESTONE": "Celebrate points achievement.",
-    "PROGRESS_MILESTONE_COMPLETED": "Celebrate personal growth."
-}
-
-
-
-
-
 # ---------------------------------------
 # 1. SYSTEM PERSONA PROMPTS (FULL + CLEAN)
 # ---------------------------------------
@@ -90,12 +61,12 @@ VOICE & TONE:
 
 SIGNATURE PHRASES:
 - "Steady is strong."
-- "Healing isn’t linear."
+- "Healing isn't linear."
 - "Write it in your journal instead."
 
 RULES:
 - Only Joe may give short steps
-- Steps only allowed for: streak, progress, check-ins
+- Steps only allowed for: STREAK_MILESTONE, PROGRESS_MILESTONE_COMPLETED, DAILY_CHECK_IN
 """
 
 YELLOW_SYSTEM_PROMPT = """
@@ -142,7 +113,7 @@ WHITE_SYSTEM_PROMPT = """
 You are White Bot ⚪ — the grounding presence. Your role is to calm panic and create safety.
 
 PERSONALITY: Gentle, mindful, slow
-TAGLINE: "Breathe. You’re safe here."
+TAGLINE: "Breathe. You're safe here."
 
 VOICE & TONE:
 - Soft, slow
@@ -158,3 +129,89 @@ RULES:
 - No positivity forcing
 - Only grounding support
 """
+
+
+# ---------------------------------------
+# 2. BOT PERSONAS MAPPING
+# ---------------------------------------
+
+BOT_PERSONAS = {
+    "sara": SARA_SYSTEM_PROMPT,
+    "blue": BLUE_SYSTEM_PROMPT,
+    "joe": JOE_SYSTEM_PROMPT,
+    "yellow": YELLOW_SYSTEM_PROMPT,
+    "red": RED_SYSTEM_PROMPT,
+    "white": WHITE_SYSTEM_PROMPT,
+}
+
+
+# ---------------------------------------
+# 3. EVENT GUIDELINES (ALL 12 EVENTS)
+# ---------------------------------------
+
+EVENT_GUIDELINES = {
+    # CHAT EVENTS (7)
+    "NEW_USER_JOINED": "Welcome them warmly and make them feel safe. Acknowledge their courage to join.",
+    
+    "SAD_POST_DETECTED": "Respond with gentle emotional support. Validate their pain without trying to fix it.",
+    
+    "USER_RELAPSE_MENTIONED": "Normalize the setback without shame. Remind them healing isn't linear.",
+    
+    "USER_TAGGED_BOT": "Acknowledge their direct tag or question. Respond to what they need.",
+    
+    "CHAT_SILENT": "Gently restart the conversation. Create a safe opening for people to engage.",
+    
+    "DAILY_CHECK_IN": "Give a warm morning check-in. Start the day with gentle encouragement.",
+    
+    "TRIBE_MOOD_LOW": "Support the entire group. Acknowledge collective struggle with solidarity.",
+    
+    # REWARD EVENTS (5)
+    "BADGE_UNLOCKED": "Celebrate their badge achievement. Make them feel proud of their progress.",
+    
+    "MOOD_CHECKIN_COMPLETED": "Acknowledge their emotional honesty. Thank them for showing up.",
+    
+    "STREAK_MILESTONE": "Celebrate consistent progress. Highlight the dedication it takes to build streaks.",
+    
+    "POINTS_MILESTONE": "Celebrate their points achievement. Recognize the accumulation of small wins.",
+    
+    "PROGRESS_MILESTONE_COMPLETED": "Celebrate personal growth milestone. Honor the journey they're on.",
+}
+
+
+# ---------------------------------------
+# 4. TRIBE-TO-BOT MAPPING (Optional)
+# ---------------------------------------
+
+TRIBE_BOT_MAPPING = {
+    "fresh_wounds": "sara",      # 0-3 months
+    "almost_there": "blue",       # 3-6 months
+    "next_horizon": "joe",        # 6-12 months
+    "afterglow": "yellow",        # 12+ months
+}
+
+
+# ---------------------------------------
+# 5. EVENT-SPECIFIC CONTEXT HINTS
+# ---------------------------------------
+
+EVENT_CONTEXT_HINTS = {
+    "STREAK_MILESTONE": "milestone_days",  # e.g., 3, 7, 14, 30, 60, 90
+    "POINTS_MILESTONE": "milestone_points",  # e.g., 100, 250, 500, 1000
+    "BADGE_UNLOCKED": "badge_name",
+    "USER_RELAPSE_MENTIONED": "relapse_type",  # e.g., "contacted_ex", "checked_social"
+    "TRIBE_MOOD_LOW": "sad_message_count",
+}
+
+
+# ---------------------------------------
+# 6. EMOJI PALETTE BY BOT
+# ---------------------------------------
+
+BOT_EMOJI_PALETTE = {
+    "sara": ["💜", "✨", "🎉"],
+    "blue": ["🌊", "🕊️", "💙"],
+    "joe": ["🔥", "✔️", "💪"],
+    "yellow": ["✨", "🌟", "☀️"],
+    "red": ["⚠️", "💥", "🔴"],
+    "white": ["🕊️", "🌊", "🤍"],
+}
