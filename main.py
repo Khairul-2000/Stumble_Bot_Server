@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.responses import FileResponse
 
 from pydantic import BaseModel
+from typing import Optional
 import openai
 import os
 import json
@@ -167,7 +168,7 @@ class BotEvent(BaseModel):
     event_type: str
     event_data: dict
     context: dict = {}
-    timestamp: str | None = None
+    timestamp: Optional[str] = None
 
 
 # --------------------------
