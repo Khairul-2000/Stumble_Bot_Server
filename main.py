@@ -1,17 +1,13 @@
 from fastapi import FastAPI
 from fastapi.responses import FileResponse
-
 from pydantic import BaseModel
 from typing import Optional
-import openai
-import os
-import json
-
 from persona_config import (
     BOT_PERSONAS,
     EVENT_GUIDELINES,
 )
 from model_config import model
+from routes import router as api_router
 
 # --------------------------
 #  CONFIG
@@ -20,6 +16,9 @@ from model_config import model
 
 
 app = FastAPI()
+
+
+app.include_router(api_router, prefix="/api/v1")
 
 
 # --------------------------
@@ -93,7 +92,7 @@ You are a supportive, non-judgmental emotional support bot.
 A user has expressed thoughts of suicide or wanting to harm themselves.
 
 RESPOND WITH:
-- 1–2 gentle, SHORT sentences.
+- 1-4 gentle, SHORT sentences.
 - Validate their feelings with warmth.
 - Encourage reaching out to someone they trust or a crisis helpline.
 - No instructions, no steps, no solutions.
@@ -126,7 +125,7 @@ def build_normal_prompt(bot_persona, event_type, event_data, context):
 
     STRICT_RULES = f"""
 STRICT NON-NEGOTIABLE RULES:
-- Response MUST be 1–2 sentences ONLY.
+- Response MUST be 1-4 sentences ONLY.
 - MUST be under 280 characters.
 - MUST mention {username}.
 - Never start with username in sentence.
