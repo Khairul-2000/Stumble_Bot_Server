@@ -123,6 +123,22 @@ def build_normal_prompt(bot_persona, event_type, event_data, context):
         "Respond appropriately to this event with emotional sensitivity."
     )
 
+    # SPECIAL HANDLING FOR USER_TAGGED_BOT
+    user_message_section = ""
+    if event_type == "USER_TAGGED_BOT":
+        user_question = event_data.get("question", event_data.get("message", ""))
+        if user_question:
+            user_message_section = f"""
+USER'S MESSAGE TO YOU:
+"{user_question}"
+
+YOU MUST:
+- Directly respond to what {username} said above
+- Address their specific situation/question
+- Stay in character with your persona
+- Be conversational like responding to a friend
+"""
+
     STRICT_RULES = f"""
 STRICT NON-NEGOTIABLE RULES:
 - Response MUST be 1-4 sentences ONLY.
@@ -144,6 +160,8 @@ EVENT TYPE: {event_type}
 EVENT GOAL: {event_rule}
 
 USERNAME: {username}
+
+{user_message_section}
 
 CONTEXT:
 Recent Messages: {context.get("recent_messages", [])}
@@ -219,6 +237,8 @@ async def bot_event_handler(payload: BotEvent):
             context=payload.context
         )
 
+        print(f"Prompt DEBUGGING:\n{prompt}\n")
+
     # ---------------------
     # 4. GENERATE BOT RESPONSE
     # ---------------------
@@ -234,8 +254,11 @@ async def bot_event_handler(payload: BotEvent):
     return {
         "success": True,
         "response": final_text,
-        "safety_triggered": llm_self_harm_check(combined_text)  # For debugging
+        "safety_triggered": llm_self_harm_check(combined_text)
     }
+
+
+
 
 
 # --------------------------
